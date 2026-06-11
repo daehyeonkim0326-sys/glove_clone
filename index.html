@@ -9,21 +9,53 @@
 </head>
 <body>
     <header>
-        <nav>
+        <nav class="nav">
             <img src="./img/imgi_1_logo_white.svg" alt="logo">
             <ul class="big_menu">
-                <li>What's On</li>
-                <li>Lifestyle</li>
-                <li>Work</li>
-                <li>About</li>
+                <li>
+                    <a href="#">What's On</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">Sub 1</a></li>
+                        <li><a href="#">Sub 2</a></li>
+                        <li><a href="#">Sub 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Lifestyle</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">Sub 1</a></li>
+                        <li><a href="#">Sub 2</a></li>
+                        <li><a href="#">Sub 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Work</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">Sub 1</a></li>
+                        <li><a href="#">Sub 2</a></li>
+                        <li><a href="#">Sub 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">Sub 1</a></li>
+                        <li><a href="#">Sub 2</a></li>
+                        <li><a href="#">Sub 3</a></li>
+                    </ul>
+                </li>
+                
             </ul>
             <ul>
                 <li><button><p>어메니티 예약</p></button></li>
                 <li><h3>KR</h3></li>
                 <li><img src="./img/imgi_3_icon_place_white2.svg" alt="map"></li>
-                <li><img src="./img/imgi_4_icon_search.svg" alt="search"></li>
+                <li class="search-btn"><img src="./img/imgi_4_icon_search.svg" alt="search"></li>
                 <li class="none"><img src="./img/imgi_5_icon_menu.svg" alt="menu"></li>
             </ul>
+            <div class="search">
+                <input placeholder="검색어를 입력하세요"/>
+            </div>
         </nav>
         <div class="txt">
             <h1>One Grove</h1>
@@ -103,7 +135,7 @@
                 </li>
             </ul>
             <div class="btn">
-                <button class="prew">&lt;</button>
+                <button class="prev">&lt;</button>
                 <button class="next">&gt;</button>
             </div>
         </section>           
@@ -184,4 +216,73 @@
         </div>
     </footer>
 </body>
+<script>
+    const nav = document.querySelector(".nav");
+    const search = document.querySelector(".search");
+    const searchBtn = document.querySelector(".search-btn");
+    searchBtn.addEventListener("click", () => {
+    nav.classList.toggle("active");
+    search.classList.toggle("active2");
+    } );
+     document.addEventListener("DOMContentLoaded", () => {
+        const slideSection = document.querySelector("#slide");
+        const greenSection = document.querySelector("#green");
+
+        const initCarousel = (section, listSelector, prevSelector, nextSelector) => {
+            const slideList = section?.querySelector(listSelector);
+            const prevBtn = section?.querySelector(prevSelector);
+            const nextBtn = section?.querySelector(nextSelector);
+            if (!section || !slideList || !prevBtn || !nextBtn) return;
+
+            const slides = Array.from(slideList.children);
+            if (slides.length === 0) return;
+
+            const gap = parseFloat(getComputedStyle(slideList).gap || "0");
+            const slideWidth = () => slides[0].getBoundingClientRect().width + gap;
+
+            const firstClone = slides[0].cloneNode(true);
+            const lastClone = slides[slides.length - 1].cloneNode(true);
+            slideList.appendChild(firstClone);
+            slideList.insertBefore(lastClone, slideList.firstChild);
+
+            let currentIndex = 1;
+            const updatePosition = (animate = true) => {
+                slideList.style.transition = animate ? "transform 0.5s ease-in-out" : "none";
+                slideList.style.transform = `translateX(-${currentIndex * slideWidth()}px)`;
+            };
+
+            updatePosition(false);
+
+            const handleTransitionEnd = () => {
+                if (currentIndex === 0) {
+                    currentIndex = slides.length;
+                    updatePosition(false);
+                } else if (currentIndex === slides.length + 1) {
+                    currentIndex = 1;
+                    updatePosition(false);
+                }
+            };
+
+            nextBtn.addEventListener("click", () => {
+                currentIndex += 1;
+                updatePosition(true);
+            });
+
+            prevBtn.addEventListener("click", () => {
+                currentIndex -= 1;
+                updatePosition(true);
+            });
+
+            slideList.addEventListener("transitionend", handleTransitionEnd);
+            window.addEventListener("resize", () => updatePosition(false));
+        };
+
+        const slideMediaQuery = window.matchMedia("(min-width:1024px)");
+
+        if (!slideMediaQuery.matches) {
+            initCarousel(slideSection, "ul", ".btn .prev", ".btn .next");
+        }
+        initCarousel(greenSection, ".img > ul", ".prev", ".next");
+    });
+</script>
 </html>
