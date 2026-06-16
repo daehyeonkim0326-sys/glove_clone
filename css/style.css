@@ -148,12 +148,12 @@ header nav .big_menu > li::after {
 header nav .big_menu > li:hover::after {
   width: 100%;
 }
-@media all and (min-width: 1024px) {
+@media all and (min-width: 768px) {
   header nav .big_menu > li:hover .sub-menu {
     display: block;
   }
 }
-@media all and (max-width: 1023px) {
+@media all and (max-width: 784px) {
   header nav .big_menu > li.is-open .sub-menu {
     display: block;
     position: static;
